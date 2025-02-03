@@ -1,7 +1,7 @@
 import {useEffect, useState} from "react"
 
-export const useFetchResult = <S>(url: string, fetch: (url: string) => Promise<S>) => {
-    const [result, setResult] = useState({} as S)
+export const useFetchResult = <S>(initialState: S, fetch: () => Promise<S>) => {
+    const [result, setResult] = useState(initialState)
     const [loading, setLoading] = useState(true)
     const [error, setError] = useState<Error | null>(null)
 
@@ -10,7 +10,7 @@ export const useFetchResult = <S>(url: string, fetch: (url: string) => Promise<S
             setLoading(true)
 
             try {
-                setResult(await fetch(url))
+                setResult(await fetch())
             }
             catch (e) {
                 setError(e as Error);
