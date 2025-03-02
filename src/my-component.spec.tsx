@@ -16,7 +16,7 @@ jest.mock('./my-class', () => {
 // });
 
 import {act, render, screen} from "@testing-library/react";
-import MyComponent from "@/my-component.tsx";
+import MyComponent from "@/my-component";
 
 describe("MyComponent", () => {
     it("renders heading", async () => {

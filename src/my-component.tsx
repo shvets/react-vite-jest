@@ -1,33 +1,44 @@
-import {MyClass} from "@/my-class.ts";
-import {useMemo} from "react";
-import {useFetchResult} from "@/useFetchResult.ts";
+import {MyClass} from "./my-class"
+import {useEffect, useMemo} from "react"
+
+import {useFetch} from "@/hooks/useFetch"
 
 const MyComponent = () => {
     const myClass = useMemo<MyClass>(() => new MyClass(), []);
 
-    const {result} = useFetchResult('', async () => {
-        return await myClass.myMethod2()
-    })
+    const {fetch, isLoading, error} = useFetch()
 
-    // if (loading) {
-    //     return <div>Loading...</div>;
-    // }
-    //
-    // if (error) {
-    //     return <div>Error: {error.message}</div>;
-    // }
+    let result: any
+
+    const a = async () => {
+        await myClass.myMethod2()
+    }
+
+    useEffect(() => {
+        (async () => {
+            result = await fetch(a)
+        })()
+    }, [])
+
+    if (isLoading) {
+        return <div>Loading...</div>;
+    }
+
+    if (error) {
+        return <div>Error: {error.message}</div>;
+    }
 
     return (
         <div data-testid="my-component">
             <div>
-                {myClass.myMethod()}
+                1. {myClass.myMethod()}
             </div>
 
             <div>
-                {result}
+                2. {result}
             </div>
         </div>
     );
 };
 
-export default MyComponent;
+export default MyComponent
