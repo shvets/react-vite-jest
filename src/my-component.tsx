@@ -1,5 +1,5 @@
 import {MyClass} from "./my-class"
-import {useEffect, useMemo} from "react"
+import {useEffect, useMemo, useState} from "react"
 
 import {useFetch} from "@/hooks/useFetch"
 
@@ -8,15 +8,15 @@ const MyComponent = () => {
 
     const {fetch, isLoading, error} = useFetch()
 
-    let result: any
+    const [result, setResult] = useState<string>()
 
-    const a = async () => {
-        await myClass.myMethod2()
+    const callback = async () => {
+        setResult(await myClass.myMethod2())
     }
 
     useEffect(() => {
         (async () => {
-            result = await fetch(a)
+            await fetch(callback)
         })()
     }, [])
 
