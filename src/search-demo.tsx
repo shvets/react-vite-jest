@@ -1,36 +1,27 @@
-import {Search} from "@/components/search/search"
-import {SearchResults} from "@/components/search/search-results"
-import {SearchInput} from "@/components/search/search-input"
-import {fetchData} from "@/data.ts";
+import {Suspense, useDeferredValue, useState} from "react"
 
-// interface Album {
-//     id: number
-//     title: string
-//     year: number
-// }
+import {SearchInput} from "./components/search/search-input"
+import {Album, getAlbums} from "./search-service"
+import {SearchResults} from "@/components/search/search-results.tsx"
+import {SearchQuery} from "@/components/search/search-query"
+import {ResultsRenderer} from "@/results-renderer"
 
 export const SearchDemo = () => {
+    const [query, setQuery] = useState<SearchQuery>({value: ''})
+
+    const deferredQuery = useDeferredValue(query)
+
+    const onSearch = (query: SearchQuery): Promise<Album[]> => {
+        return getAlbums(query.value)
+    }
+
     const fallback = <h2>Loading...</h2>
 
-    const ResultsRenderer = (items: any) => {
-        console.log(items.items)
-        return <ul>
-            {items.items.map((item: any) => (
-                <li key={item.id}>
-                    {item.title} ({item.year})
-                </li>
-            ))}
-        </ul>
-    }
+    return <>
+        <SearchInput query={query} setQuery={setQuery}/>
 
-    const onSearch = (query: string) => {
-        return fetchData(`/search?q=${query}`)
-    }
-
-    return (
-        <>
-            <Search SearchInput={SearchInput} SearchResults={SearchResults} ResultsRenderer={ResultsRenderer}
-                    fallback={fallback} onSearch={onSearch}/>
-        </>
-    );
+        <Suspense fallback={fallback}>
+            <SearchResults query={deferredQuery} onSearch={onSearch} ResultsRenderer={ResultsRenderer}/>
+        </Suspense>
+    </>
 }
