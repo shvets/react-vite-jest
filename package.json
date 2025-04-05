@@ -9,6 +9,7 @@
     "dev": "vite",
     "build": "tsc && vite build",
     "coverage": "npm test --coverage --watchAll --collectCoverageFrom='src/components/**/*.{ts,tsx}'",
+    "coverage2": "vitest run --coverage",
     "lint": "eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
     "preview": "vite preview"
   },
@@ -37,7 +38,9 @@
     "ts-node": "^10.9.2",
     "typescript": "^5.7.3",
     "vite": "^6.2.0",
-    "vitest": "^3.0.7",
-    "vite-tsconfig-paths": "^5.1.4"
+    "vitest": "^3.1.1",
+    "vite-tsconfig-paths": "^5.1.4",
+    "jsdom": "^26.0.0",
+    "@tanstack/react-table": "^8.21.2"
   }
 }

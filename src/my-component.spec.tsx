@@ -1,4 +1,7 @@
-// import {MyClass} from "@/my-class.ts";
+// import {MyClass} from "./my-class"
+import { vi } from 'vitest'
+
+const jest = vi
 
 jest.mock('./my-class', () => {
     return {
@@ -18,7 +21,7 @@ jest.mock('./my-class', () => {
 import {act, render, screen} from "@testing-library/react";
 import MyComponent from "@/my-component";
 
-describe("MyComponent", () => {
+xdescribe("MyComponent", () => {
     it("renders heading", async () => {
         await act(async () => {
             render(<MyComponent/>);

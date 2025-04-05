@@ -1,6 +1,9 @@
 import { render, screen } from "@testing-library/react";
 import CounterTwo from "@/components/counter-two/Counter-two";
 import user from "@testing-library/user-event";
+import { vi } from 'vitest'
+
+const jest = vi
 
 describe("Counter-two", () => {
   test("should call function on button click", async () => {
