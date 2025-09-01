@@ -1,16 +1,35 @@
-import React, {useState, useEffect} from 'react';
-import styles from './TableWithContextMenu.module.css';
+import React, {useState, useEffect} from 'react'
+
+import styles from './TableWithContextMenu.module.css'
 
 interface MenuItem {
-    label: string;
-    action: () => void;
+    label: string
+    action: () => void
+}
+
+interface Cell {
+    value: string
+    type: 'edit' | 'delete' | 'copy'
+}
+
+const generateMenuItems = (type: Cell['type'], value: string): MenuItem[] => {
+    switch (type) {
+        case 'edit':
+            return [{ label: `Edit ${value}`, action: () => console.log(`Edit ${value}`) }]
+        case 'delete':
+            return [{ label: `Delete ${value}`, action: () => console.log(`Delete ${value}`) }]
+        case 'copy':
+            return [{ label: `Copy ${value}`, action: () => console.log(`Copy ${value}`) }]
+        default:
+            return []
+    }
 }
 
 interface ContextMenuProps {
-    x: number;
-    y: number;
-    onClose: () => void;
-    menuItems: MenuItem[];
+    x: number
+    y: number
+    onClose: () => void
+    menuItems: MenuItem[]
 }
 
 const ContextMenu: React.FC<ContextMenuProps> = ({ x, y, onClose, menuItems }) => {
@@ -25,71 +44,95 @@ const ContextMenu: React.FC<ContextMenuProps> = ({ x, y, onClose, menuItems }) =
                     key={index}
                     className={styles.menuItem}
                     onClick={() => {
-                        item.action();
-                        onClose();
+                        item.action()
+                        onClose()
                     }}
                 >
                     {item.label}
                 </div>
             ))}
         </div>
-    );
-};
+    )
+}
+
+const useContextMenu = () => {
+    const [contextMenu, setContextMenu] = useState<{
+        x: number
+        y: number
+        menuItems: MenuItem[]
+    } | null>(null)
+
+    const handleCellContextMenu = (event: React.MouseEvent, menuItems: MenuItem[]) => {
+        event.preventDefault()
+        event.stopPropagation()
+
+        closeMenu()
+
+        setTimeout(() => { // Delay to ensure the menu opens for the new cell
+            openMenu(menuItems, event)
+        }, 0)
+    }
+
+    const openMenu = (menuItems: MenuItem[], event: React.MouseEvent) => {
+        setContextMenu({
+            x: event.clientX,
+            y: event.clientY,
+            menuItems,
+        })
+    }
+
+    const closeMenu = () => {
+        setContextMenu(null)
+    }
+
+    useEffect(() => {
+        const handleClickOutside = () => setContextMenu(null)
+        const handleScroll = () => setContextMenu(null)
+        const handleKeyDown = (event: KeyboardEvent) => {
+            if (event.key === 'Escape') {
+                closeMenu()
+            }
+        }
+
+        document.addEventListener('click', handleClickOutside)
+        document.addEventListener('scroll', handleScroll) // , true
+        document.addEventListener('keydown', handleKeyDown)
+
+        return () => {
+            document.removeEventListener('click', handleClickOutside)
+            document.removeEventListener('scroll', handleScroll)
+            document.removeEventListener('keydown', handleKeyDown)
+        }
+    }, [])
+
+    return {contextMenu, setContextMenu, handleCellContextMenu}
+}
 
 
 export const TableWithContextMenu: React.FC = () => {
-    const [contextMenu, setContextMenu] = useState<{
-        x: number;
-        y: number;
-        menuItems: MenuItem[];
-    } | null>(null);
+    const { contextMenu, setContextMenu, handleCellContextMenu } = useContextMenu()
 
-    const data = [
+    const data: Cell[][] = [
         [
-            { value: 'A1', menuItems: [{ label: 'Edit A1', action: () => console.log('Edit A1') }] },
-            { value: 'B1', menuItems: [{ label: 'Delete B1', action: () => console.log('Delete B1') }] },
-            { value: 'C1', menuItems: [{ label: 'Copy C1', action: () => console.log('Copy C1') }] },
+            { value: 'A1', type: 'edit' },
+            { value: 'B1', type: 'delete' },
+            { value: 'C1', type: 'copy' },
         ],
         [
-            { value: 'A2', menuItems: [{ label: 'Edit A2', action: () => console.log('Edit A2') }] },
-            { value: 'B2', menuItems: [{ label: 'Delete B2', action: () => console.log('Delete B2') }] },
-            { value: 'C2', menuItems: [{ label: 'Copy C2', action: () => console.log('Copy C2') }] },
+            { value: 'A2', type: 'edit' },
+            { value: 'B2', type: 'delete' },
+            { value: 'C2', type: 'copy' },
         ],
         [
-            { value: 'A3', menuItems: [{ label: 'Edit A3', action: () => console.log('Edit A3') }] },
-            { value: 'B3', menuItems: [{ label: 'Delete B3', action: () => console.log('Delete B3') }] },
-            { value: 'C3', menuItems: [{ label: 'Copy C3', action: () => console.log('Copy C3') }] },
+            { value: 'A3', type: 'edit' },
+            { value: 'B3', type: 'delete' },
+            { value: 'C3', type: 'copy' },
         ],
-    ];
-
-    const handleCellContextMenu = (e: React.MouseEvent, menuItems: MenuItem[]) => {
-        e.preventDefault();
-        e.stopPropagation();
-        setContextMenu(null); // Close any existing context menu
-        setTimeout(() => { // Delay to ensure the menu opens for the new cell
-            setContextMenu({
-                x: e.clientX,
-                y: e.clientY,
-                menuItems,
-            });
-        }, 0);
-    };
-
-    useEffect(() => {
-        const handleClickOutside = () => setContextMenu(null);
-        const handleScroll = () => setContextMenu(null);
-
-        document.addEventListener('click', handleClickOutside);
-        document.addEventListener('scroll', handleScroll);
-
-        return () => {
-            document.removeEventListener('click', handleClickOutside);
-            document.removeEventListener('scroll', handleScroll);
-        };
-    }, []);
+    ]
 
     return (
-        <div style={{ position: 'relative' }}>
+        <>
+        {/*<div style={{ position: 'relative' }}>*/}
             <table className={styles.table}>
                 <tbody>
                 {data.map((row, rowIndex) => (
@@ -98,7 +141,9 @@ export const TableWithContextMenu: React.FC = () => {
                             <td
                                 key={cellIndex}
                                 className={styles.cell}
-                                onContextMenu={(e) => handleCellContextMenu(e, cell.menuItems)}
+                                onContextMenu={(e) =>
+                                    handleCellContextMenu(e, generateMenuItems(cell.type, cell.value))
+                                }
                             >
                                 {cell.value}
                             </td>
@@ -115,6 +160,7 @@ export const TableWithContextMenu: React.FC = () => {
                     menuItems={contextMenu.menuItems}
                 />
             )}
-        </div>
-    );
-};
+        {/*</div>*/}
+        </>
+    )
+}
