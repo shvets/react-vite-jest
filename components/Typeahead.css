@@ -1,0 +1,56 @@
+.typeahead {
+  position: relative;
+  width: 250px;
+}
+
+.typeahead-input {
+  width: 100%;
+  padding: 8px;
+  box-sizing: border-box;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+.typeahead-list {
+  position: absolute;
+  top: calc(100% + 4px);
+  left: 0;
+  right: 0;
+  background: white;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  max-height: 300px;
+  overflow-y: auto;
+  z-index: 1000;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.typeahead-item {
+  padding: 8px;
+  cursor: pointer;
+  text-align: left;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.typeahead-item:hover {
+  background: #f5f5f5;
+}
+
+.typeahead-item-selected {
+  background: #e8f0fe;
+}
+
+.typeahead-item-selected:hover {
+  background: #e8f0fe;
+}
+
+.typeahead-loading {
+  padding: 8px;
+  text-align: center;
+  color: #666;
+  font-style: italic;
+}
