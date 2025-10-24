@@ -1,0 +1,34 @@
+.editable-table-wrapper {
+  overflow: auto;
+}
+
+.editable-table {
+  border-collapse: collapse;
+  width: 100%;
+}
+
+.editable-table th,
+.editable-table td {
+  border: 1px solid #e0e0e0;
+  padding: 6px;
+  text-align: left;
+  vertical-align: middle;
+}
+
+.editable-table input[type="text"],
+.editable-table select {
+  width: 100%;
+  box-sizing: border-box;
+  padding: 4px;
+  margin: 0;
+}
+
+.editable-table input[type="checkbox"] {
+  transform: scale(1.02);
+  margin-left: 4px;
+}
+
+.editable-cell:focus {
+  outline: 2px solid #4d90fe;
+  outline-offset: 1px;
+}
