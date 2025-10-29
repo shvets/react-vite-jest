@@ -1,4 +1,4 @@
-import {Suggestion} from "./suggestion.ts"
+import {Suggestion} from "./model/suggestion.ts"
 
 interface TypeaheadItemProps<T> {
   item: T

@@ -6,9 +6,11 @@ import './App.css'
 // import {SearchDemo} from "@/search-demo.tsx";
 // import {TableDemo} from "@/TableDemo.tsx";
 import React, {useState} from "react";
-import {Suggestion} from "../components/suggestion.ts";
+import {Suggestion} from "../components/typeahead/model/suggestion.ts";
 import DownloadExcelButton from "@/DownloadExcelButton.tsx";
 import TableWidthDetector from './components/TableWidthDetector';
+import Typeahead from "../components/Typeahead.tsx";
+import TypeaheadItem from "../components/typeahead/TypeaheadItem.tsx";
 
 const generateMockData = () => {
   const fruits = ['Apple', 'Banana', 'Orange', 'Mango', 'Pear', 'Grape', 'Kiwi', 'Lemon',
@@ -46,6 +48,8 @@ function App() {
     setDownloadOutcome('Download was canceled by the user.');
   };
 
+  const pageSize = 10
+  const placeholder = "Select..."
 
   // const [count, setCount] = useState(0)
   const fetchItems = React.useCallback(
@@ -100,37 +104,52 @@ function App() {
       {/*<TableDemo/>*/}
 
       {/*<TableWithContextMenu/>*/}
-      {/*<div style={{ padding: 40 }}>*/}
-      {/*    <h2>Typeahead Example</h2>*/}
-      {/*  <Typeahead minQueryLength={3} fetchItems={fetchItems}/>*/}
+
+      <div style={{padding: 40}}>
+        <h2>Typeahead Example</h2>
+        <Typeahead<Suggestion> minQueryLength={1} pageSize={pageSize} placeholder={placeholder} fetchItems={fetchItems}
+                               onSelect={(item) => console.log('Selected item:', item)}>
+
+          {(item, isSelected, onSelectItem) => (
+            <TypeaheadItem key={item.id} item={item} isSelected={isSelected}
+                           onSelect={onSelectItem} />
+          )}
+        </Typeahead>
+      </div>
+
+      {/*<div>*/}
+      {/*  <h1>Export Data to Excel</h1>*/}
+      {/*  <DownloadExcelButton<User>*/}
+      {/*    data={userData}*/}
+      {/*    fileName="users.xlsx"*/}
+      {/*    onDownloadSaved={handleDownloadSaved}*/}
+      {/*    onDownloadCanceled={handleDownloadCanceled}*/}
+      {/*  >*/}
+      {/*    Download User Data (.xlsx)*/}
+      {/*  </DownloadExcelButton>*/}
+      {/*  {downloadOutcome && (*/}
+      {/*    <p style={{marginTop: '15px', color: downloadOutcome.includes('saved') ? 'green' : 'red'}}>*/}
+      {/*      {downloadOutcome}*/}
+      {/*    </p>*/}
+      {/*  )}*/}
       {/*</div>*/}
 
-      <div>
-        <h1>Export Data to Excel</h1>
-        <DownloadExcelButton<User>
-          data={userData}
-          fileName="users.xlsx"
-          onDownloadSaved={handleDownloadSaved}
-          onDownloadCanceled={handleDownloadCanceled}
-        >
-          Download User Data (.xlsx)
-        </DownloadExcelButton>
-        {downloadOutcome && (
-          <p style={{ marginTop: '15px', color: downloadOutcome.includes('saved') ? 'green' : 'red' }}>
-            {downloadOutcome}
-          </p>
-        )}
-      </div>
+      {/*<div style={{padding: 16}}>*/}
+      {/*  <h2>TableWidthDetector demo</h2>*/}
+      {/*  <p>Drag the container border (or resize the window) to see width and direction updates.</p>*/}
 
-      <div style={{ padding: 16 }}>
-        <h2>TableWidthDetector demo</h2>
-        <p>Drag the container border (or resize the window) to see width and direction updates.</p>
-
-        {/* wrapper is resizable in supporting browsers; TableWidthDetector also supports scrolling */}
-        <div style={{ width: '80%', maxWidth: '100%', resize: 'horizontal', overflow: 'auto', border: '1px solid #ccc', padding: 8 }}>
-          <TableWidthDetector columnsCount={16} rowsCount={100} onChange={handleChange} />
-        </div>
-      </div>
+      {/*  /!* wrapper is resizable in supporting browsers; TableWidthDetector also supports scrolling *!/*/}
+      {/*  <div style={{*/}
+      {/*    width: '80%',*/}
+      {/*    maxWidth: '100%',*/}
+      {/*    resize: 'horizontal',*/}
+      {/*    overflow: 'auto',*/}
+      {/*    border: '1px solid #ccc',*/}
+      {/*    padding: 8*/}
+      {/*  }}>*/}
+      {/*    <TableWidthDetector columnsCount={16} rowsCount={100} onChange={handleChange}/>*/}
+      {/*  </div>*/}
+      {/*</div>*/}
 
     </>
   );
