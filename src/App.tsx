@@ -8,6 +8,7 @@ import './App.css'
 import React, {useState} from "react";
 import {Suggestion} from "../components/suggestion.ts";
 import DownloadExcelButton from "@/DownloadExcelButton.tsx";
+import TableWidthDetector from './components/TableWidthDetector';
 
 const generateMockData = () => {
   const fruits = ['Apple', 'Banana', 'Orange', 'Mango', 'Pear', 'Grape', 'Kiwi', 'Lemon',
@@ -67,6 +68,10 @@ function App() {
     []
   )
 
+  const handleChange = (payload: { width: number | null; direction: 'increasing' | 'decreasing' | 'same' | null }) => {
+    console.log('Table size changed:', payload);
+  };
+
   return (
     <>
       {/*<div>*/}
@@ -115,6 +120,16 @@ function App() {
             {downloadOutcome}
           </p>
         )}
+      </div>
+
+      <div style={{ padding: 16 }}>
+        <h2>TableWidthDetector demo</h2>
+        <p>Drag the container border (or resize the window) to see width and direction updates.</p>
+
+        {/* wrapper is resizable in supporting browsers; TableWidthDetector also supports scrolling */}
+        <div style={{ width: '80%', maxWidth: '100%', resize: 'horizontal', overflow: 'auto', border: '1px solid #ccc', padding: 8 }}>
+          <TableWidthDetector columnsCount={16} rowsCount={100} onChange={handleChange} />
+        </div>
       </div>
 
     </>

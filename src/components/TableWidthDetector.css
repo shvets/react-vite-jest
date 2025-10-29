@@ -1,0 +1,77 @@
+.table-width-detector {
+  font-family: sans-serif;
+  margin: 12px;
+  position: relative;
+}
+
+.detector-header {
+  margin-bottom: 8px;
+  font-size: 14px;
+}
+
+.label-container {
+  position: relative;
+  height: 28px; /* reserve space for the floating label */
+  margin-bottom: 6px;
+}
+
+/* label base */
+.direction-label {
+  position: absolute;
+  top: 0;
+  padding: 4px 8px;
+  background: #f0f4ff;
+  border: 1px solid #c7d3ff;
+  border-radius: 4px;
+  font-size: 12px;
+  color: #1a3a8a;
+  transition: left 180ms ease, right 180ms ease, transform 180ms ease;
+  white-space: nowrap;
+}
+
+/* left, center, right positions */
+.direction-label.left {
+  left: 8px;
+  transform: none;
+}
+
+.direction-label.center {
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+.direction-label.right {
+  right: 8px;
+  left: auto;
+  transform: none;
+}
+
+/* table wrapper and table styles (existing) */
+.table-scroll-wrapper {
+  overflow: auto; /* allow horizontal resize/scroll */
+  border: 1px solid #ddd;
+  padding: 6px;
+  resize: horizontal; /* allows manual resizing in some browsers */
+  max-width: 100%;
+}
+
+.detector-table {
+  border-collapse: collapse;
+  width: 100%;
+  min-width: 800px; /* ensure initial table is wide */
+}
+
+.detector-table th,
+.detector-table td {
+  padding: 6px 10px;
+  border: 1px solid #eee;
+  white-space: nowrap;
+}
+
+.detector-direction {
+  color: #666;
+}
+
+.detector-value {
+  font-weight: 600;
+}
